@@ -1,2 +1,3 @@
 #!/bin/bash
-compgen -W {a..z}{a..z} | grep -v ^oo$
+echo {a..z}{a..z} | tr " " "\n" | grep -v ^oo$
+Fix Task 12: Generate letter pairs with exactly 2 commands
