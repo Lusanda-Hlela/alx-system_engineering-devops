@@ -1,2 +1,2 @@
- #!/bin/bash
+#!/bin/bash
 compgen -W {a..z}{a..z} | grep -v ^oo$
