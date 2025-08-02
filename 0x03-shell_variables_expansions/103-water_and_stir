@@ -1,2 +1,2 @@
 #!/bin/bash
-n=$(( $(echo $WATER | tr water 01234) + $(echo $STIR | tr stir. 01234) )); b="bestchol"; r=""; while [ $n -gt 0 ]; do d=$((n%8)); n=$((n/8)); r="${b:$d:1}$r"; done; echo "${r:-${b:0:1}}"
+n=$(( $(echo $WATER | tr water 01234) + $(echo $STIR | tr stir. 01234) )) b="bestchol"; r=""; while [ $n -gt 0 ]; do d=$((n%8)); n=$((n/8)); r="${b:$d:1}$r"; done; echo "${r:-${b:0:1}}"
