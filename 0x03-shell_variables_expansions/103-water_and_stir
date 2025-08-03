@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "shtbeolhc"
+echo $(( $(echo "$WATER" | tr 'water' '01234' | awk '{s=0;for(i=1;i<=length;i++)s=s*5+substr($0,i,1)}END{print s}') + $(echo "$STIR" | tr 'stir' '0123' | awk '{s=0;for(i=1;i<=length;i++)s=s*4+substr($0,i,1)}END{print s}') )) | awk '{s="bestchol";r="";while($1>0){r=substr(s,($1%s)+1,1)r; $1=int($1/s)}print r}'nano 103-water_and_stirnano 103-water_and_stirnano 103-water_and_stir
