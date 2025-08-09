@@ -1,0 +1,25 @@
+# 0. Simple web stack
+
+## Infrastructure Components
+- **Server:** A physical or virtual machine running Linux to host the website.
+- **Domain name:** foobar.com with a **www** subdomain (CNAME or A record) pointing to 8.8.8.8.
+- **DNS record for www:** An **A record** mapping `www.foobar.com` to IP `8.8.8.8`.
+- **Web server (Nginx):** Handles HTTP requests, serves static files, forwards dynamic requests to the application server.
+- **Application server:** Runs the backend application code and generates dynamic content.
+- **Application files:** Codebase for the site (HTML, CSS, JS, backend code).
+- **Database (MySQL):** Stores persistent data for the application.
+
+## Communication
+- The user’s browser sends an HTTP/HTTPS request to `www.foobar.com`.
+- DNS resolves `www.foobar.com` to `8.8.8.8`.
+- Nginx receives the request → passes dynamic requests to the application server → application server queries MySQL if needed → response returned to Nginx → Nginx sends it to the browser over TCP/IP.
+
+## Issues with this setup
+- **SPOF:** Only one server; if it fails, the site is down.
+- **Downtime during maintenance:** Restarting the server or web server stops the site temporarily.
+- **No scalability:** Cannot handle large amounts of traffic without performance issues.
+
+## Diagram
+![Simple web stack](images/task-0-simple_web_stack.png)
+# Or if using Imgur:
+![Simple web stack](https://i.imgur.com/your-uploaded-image.png)
