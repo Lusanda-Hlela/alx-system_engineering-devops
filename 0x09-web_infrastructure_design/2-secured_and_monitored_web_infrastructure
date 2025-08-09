@@ -1,0 +1,43 @@
+## 3. Dockerized Web Infrastructure with Persistent Storage
+
+### Overview
+This design illustrates a **Docker Compose** setup for a simple web application consisting of two services:  
+- **App Service** (your application)  
+- **MySQL Service** (the database)  
+
+The key element is the use of a **named volume** to ensure the database's data persists.
+
+---
+
+### Components
+
+- **App Service**  
+  The container running your messaging application code.
+
+- **MySQL Service**  
+  The container running the MySQL database server.
+
+- **Named Volume (`mysql_data`)**  
+  A managed storage volume created by Docker. Its purpose is to store the MySQL database files on the host machine, independent of the container's lifecycle.
+
+- **Docker Network**  
+  An internal, virtual network that allows the App Service and MySQL Service containers to communicate with each other using their service names (e.g., `db:3306`).
+
+---
+
+### Data Flow & Lifecycle
+
+- **Data Flow**  
+  The App Service sends requests to the MySQL Service over the internal Docker network.  
+  The MySQL Service then reads from and writes data to the `mysql_data` volume on the host.
+
+- **Persistence**  
+  Because the data is stored in the named volume, it is **not lost** when the MySQL Service container is stopped, removed, or recreated.
+
+- **Restarting**  
+  When the MySQL Service container is restarted, it reconnects to the existing `mysql_data` volume and reuses the database files, ensuring data integrity across container lifecycles.
+
+---
+
+### Diagram
+[View Diagram on Imgur](https://imgur.com/a/ZHqgnuT)
