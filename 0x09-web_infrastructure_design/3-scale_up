@@ -1,0 +1,64 @@
+# 4. High-Availability Web Infrastructure
+
+## Overview
+This design outlines a high-availability web infrastructure for **www.foobar.com** by adding a load balancer cluster and separating the application tiers.  
+This setup improves fault tolerance and allows for independent scaling of different components.
+
+---
+
+## Additional Elements & Reasons
+
+- **Load Balancer Cluster (2× HAProxy)**  
+  Provides redundancy and fault tolerance.  
+  If one load balancer fails, the other can take over, preventing a single point of failure (SPOF) at the entry point.
+
+- **Separate Web and Application Servers**  
+  Separation of concerns allows each layer to be scaled and managed independently.  
+  The web server handles static content efficiently, while the application server focuses on processing dynamic requests and business logic.
+
+- **Separate Database Server**  
+  Improves security, performance, and scalability by avoiding resource contention with web/app servers.
+
+- **Database Replica**  
+  Used for read operations, offloading the load from the primary database.  
+  Also provides a hot standby for failover, ensuring data redundancy and availability.
+
+---
+
+## Load Balancer Cluster
+
+- **Algorithm:** Round Robin — distributes incoming traffic evenly across available web and application servers.  
+- **Setup:** Configurable as either:
+  - **Active-Active** — Both load balancers handle traffic simultaneously, improving utilization.
+  - **Active-Passive** — One load balancer is active, and the other is on standby for failover.
+
+---
+
+## Database Cluster
+
+- **Primary DB** — Handles all write and update operations from the application.  
+- **Replica DB** — Read-only copy of the primary, receives replicated data, used for read-heavy workloads or failover.  
+- **Replication Type:** Asynchronous — Replica updates after the primary commits transactions.
+
+---
+
+## Communication Flow
+
+1. **User → DNS:** Request for `www.foobar.com` resolved to IP of load balancer cluster.
+2. **Load Balancer → Servers:** Traffic sent to web server (static content) or application server (dynamic processing) using Round Robin.
+3. **Application Server → Database:**  
+   - **Reads:** From Replica DB.  
+   - **Writes:** To Primary DB.
+
+---
+
+## Issues / Caveats
+
+- **Complexity:** More challenging to configure and maintain than a single-server setup.
+- **Stateful Load Balancers:** Without proper session persistence, user sessions may be lost if requests go to different servers.
+- **Replication Lag:** Asynchronous replication may result in slight delays; if the primary fails suddenly, some data could be lost.
+
+---
+
+## Diagram
+![Task 4 Diagram](https://imgur.com/a/scz5skk)
