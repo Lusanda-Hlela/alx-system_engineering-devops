@@ -1,0 +1,46 @@
+# 1. Distributed web infrastructure
+
+## Additional Elements & Reasons
+- **Second Server:** Provides redundancy; if one server goes down, the other can continue serving traffic, reducing downtime.
+- **Load Balancer (HAProxy):** Distributes incoming requests across multiple servers to improve availability, balance traffic, and prevent overloading a single server.
+- **Database Primary-Replica Setup:** Improves reliability by replicating data from the Primary to the Replica and offloading read operations to the Replica, enhancing performance.
+
+---
+
+## Load Balancer
+- **Algorithm:** **Round Robin** — sequentially forwards each incoming request to the next available server, cycling through all servers evenly.
+- **Setup:** **Active-Active** — both servers actively handle traffic at the same time.
+- **Active-Active vs Active-Passive:**
+  - **Active-Active:** All servers share the traffic load simultaneously.
+  - **Active-Passive:** One server handles all requests, and the other remains on standby, ready to take over if the active server fails.
+
+---
+
+## Database Cluster
+- **Primary Database:** Handles all write and update operations from the application.
+- **Replica Database:** Continuously receives replicated data from the Primary and serves read-only queries, reducing the Primary’s load.
+
+---
+
+## Communication Flow
+1. The user’s browser requests `www.foobar.com`.
+2. DNS resolves `www.foobar.com` to the Load Balancer’s IP address.
+3. The Load Balancer distributes requests to **Web Server 1** or **Web Server 2** using Round Robin.
+4. Each Web Server serves static content and forwards dynamic requests to its Application Server.
+5. Application Servers:
+   - Write data to the **Primary DB**.
+   - Read data from the **Replica DB** when applicable.
+
+---
+
+## Issues with This Infrastructure
+- **Single Point of Failure (SPOF):** The Load Balancer is still a potential SPOF without redundancy.
+- **Database Write Consistency:** Data inconsistencies may occur if the Primary fails before all changes replicate to the Replica.
+- **Increased Complexity:** Managing multiple servers, a load balancer, and a database cluster requires more expertise and maintenance.
+- **Security Gaps:** No firewall or HTTPS configured, leaving the infrastructure vulnerable.
+- **No Monitoring:** Failures or performance degradation may go unnoticed until user complaints.
+
+---
+
+## Diagram
+![Distributed web infrastructure](https://imgur.com/a/HNMZCsx)
